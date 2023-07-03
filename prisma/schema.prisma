@@ -9,6 +9,9 @@ datasource db {
   provider = "postgresql"
   url      = env("DATABASE_URL")
 }
+generator zod {
+  provider       = "zod-prisma-types"
+}
 
 model Account {
   id                String  @id @default(cuid())
@@ -43,8 +46,10 @@ model User {
   email         String?   @unique
   emailVerified DateTime?
   image         String?
+  address       String?
   accounts      Account[]
   sessions      Session[]
+  invoices      Invoice[]
 }
 
 model VerificationToken {
@@ -54,3 +59,22 @@ model VerificationToken {
 
   @@unique([identifier, token])
 }
+
+model Invoice {
+  id           String   @id @default(cuid())
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+  paymentDue   DateTime
+  description  String
+  paymentTerms Int
+  clientName   String
+  clientEmail  String
+  clientAddress Json
+  senderAddress Json
+  User         User    @relation(fields: [userId], references: [id])
+  userId       String
+  items       Json[]
+  total       Float
+  status      String
+}
+

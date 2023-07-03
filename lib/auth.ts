@@ -17,6 +17,7 @@ export const authOptions: NextAuthOptions = {
     async session({ session }) {
       session.user = (await prisma.user.findUnique({
         where: { email: session.user?.email as string },
+        include: { invoices: true },
       })) as User;
 
       return session;
