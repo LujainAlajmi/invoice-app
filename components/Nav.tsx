@@ -36,7 +36,7 @@ export default function Nav({ user }: { user: User }) {
           <Separator orientation="vertical" />
           <Link href="/api/auth/signout">
             <Avatar>
-              <AvatarImage src={user.image as string} />
+              <AvatarImage src={user?.image as string} />
               <AvatarFallback>
                 <User2 size={24} />
               </AvatarFallback>

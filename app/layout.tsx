@@ -4,6 +4,7 @@ import { ThemeProvider } from "@/components/theme-provider";
 import { Toaster } from "@/components/ui/toaster";
 import Nav from "@/components/Nav";
 import { getCurrentUser } from "@/lib/session";
+import Link from "next/link";
 const inter = Inter({ subsets: ["latin"] });
 export const metadata = {
   title: "Frontend Mentor | Invoice app",
@@ -15,11 +16,12 @@ export default async function RootLayout({
   children: React.ReactNode;
 }) {
   const user = await getCurrentUser();
+
   return (
     <html lang="en">
       <body className={`${inter.className}  px-12 space-y-6 h-screen w-full`}>
         <ThemeProvider attribute="class" defaultTheme="system" enableSystem>
-          <Nav user={user} />
+          {user ? <Nav user={user} /> : null}
           {children}
           <Toaster />
         </ThemeProvider>

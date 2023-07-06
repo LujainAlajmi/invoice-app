@@ -15,7 +15,6 @@ export default async function Home() {
   if (!user) {
     return (
       <div>
-        <ModeToggle />
         <Link href={"/api/auth/signin"}>sign in</Link>
       </div>
     );
