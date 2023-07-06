@@ -27,6 +27,9 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
+import { Invoice } from "@prisma/client";
+import { Address, Item } from "@/lib/types";
+
 export default async function InvoicePage({
   params: { id },
 }: {
@@ -34,7 +37,7 @@ export default async function InvoicePage({
     id: string;
   };
 }) {
-  const invoice = await prisma.invoice.findUnique({
+  const invoice: Invoice | null = await prisma.invoice.findUnique({
     where: {
       id: id,
     },
@@ -42,6 +45,15 @@ export default async function InvoicePage({
       User: true,
     },
   });
+
+  const items = JSON.stringify(invoice?.items);
+  const parsedItems = JSON.parse(items) as Item[];
+
+  const senderAddress = JSON.stringify(invoice?.senderAddress);
+  const parsedSenderAddress = JSON.parse(senderAddress) as Address;
+
+  const clientAddress = JSON.stringify(invoice?.clientAddress);
+  const parsedClientAddress = JSON.parse(clientAddress) as Address;
 
   return (
     <div className="w-3/4 mx-auto">
@@ -119,16 +131,16 @@ export default async function InvoicePage({
               </div>
               <div className="flex flex-col items-end space-y-1 ">
                 <p className="text-left text-muted-foreground text-sm font-medium leading-none">
-                  {invoice?.senderAddress?.street}
+                  {parsedSenderAddress?.street}
                 </p>
                 <p className="text-left text-muted-foreground text-sm font-medium leading-none">
-                  {invoice?.senderAddress?.city}
+                  {parsedSenderAddress?.city}
                 </p>
                 <p className="text-left text-muted-foreground text-sm font-medium leading-none">
-                  {invoice?.senderAddress?.postCode}
+                  {parsedSenderAddress?.postCode}
                 </p>
                 <p className="text-left text-muted-foreground text-sm font-medium leading-none">
-                  {invoice?.senderAddress?.country}
+                  {parsedSenderAddress?.country}
                 </p>
               </div>
             </div>
@@ -174,16 +186,16 @@ export default async function InvoicePage({
                   </p>
 
                   <p className="text-sm font-medium leading-none text-muted-foreground">
-                    {invoice?.clientAddress?.street}
+                    {parsedSenderAddress?.street}
                   </p>
                   <p className="text-sm font-medium leading-none text-muted-foreground">
-                    {invoice?.clientAddress?.city}
+                    {parsedSenderAddress?.city}
                   </p>
                   <p className="text-sm font-medium leading-none text-muted-foreground">
-                    {invoice?.clientAddress?.postCode}
+                    {parsedSenderAddress?.postCode}
                   </p>
                   <p className="text-sm font-medium leading-none text-muted-foreground">
-                    {invoice?.clientAddress?.country}
+                    {parsedSenderAddress?.country}
                   </p>
                 </div>
               </div>
@@ -213,7 +225,7 @@ export default async function InvoicePage({
               </TableRow>
             </TableHeader>
             <TableBody>
-              {invoice?.items.map((item) => (
+              {parsedItems.map((item) => (
                 <TableRow key={item?.name}>
                   <TableCell className="font-medium">{item?.name}</TableCell>
                   <TableCell>{item?.quantity}</TableCell>

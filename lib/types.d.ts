@@ -9,7 +9,7 @@ export interface ExtendedInvoice extends Invoice {
   items: Item[];
 }
 
-export interface invoice {
+export type invoice = {
   id: string;
   createdAt: Date;
   paymentDue: string;
@@ -23,21 +23,21 @@ export interface invoice {
   items: Item[];
   total: number;
   User: User;
-}
+};
 
-export interface Address {
+export type Address = {
   street: string;
   city: string;
   postCode: string;
   country: string;
-}
+};
 
-export interface Item {
+export type Item = {
   name: string;
   quantity: number;
   price: number;
   total: number;
-}
+};
 
 export enum Status {
   PAID = "paid",
